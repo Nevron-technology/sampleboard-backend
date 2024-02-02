@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS = ['mc-api.nevron.io']
+ALLOWED_HOSTS = ['*']
 
 DEBUG = False
 

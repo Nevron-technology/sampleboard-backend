@@ -30,6 +30,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
+    'sticker_instructions',
     'users',
     
     'corsheaders',

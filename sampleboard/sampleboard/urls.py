@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     
     path('', include('users.urls')),
+    path('', include('core.urls')),
+    path('', include('sticker_instructions.urls')),
     path('', admin.site.urls),
 ]

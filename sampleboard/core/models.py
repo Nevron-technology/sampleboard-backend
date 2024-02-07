@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+import uuid
+
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(default=timezone.now)
@@ -32,7 +34,7 @@ class Marker(models.Model):
     
     latitude = models.CharField(max_length=200, null=True, blank=True)
     longitude = models.CharField(max_length=500, null=True, blank=True)
-    number = models.CharField(max_length=500, null=True, blank=True)
+    number = models.CharField(max_length=500, unique=True, null=True, blank=True)
     type = models.CharField(max_length=50, choices=COLOR_CHOICES, null=True, blank=True)
 
     def __str__(self):
@@ -40,6 +42,7 @@ class Marker(models.Model):
 
 
 class SampleBoard(TimeStampedModel):
+    uuid = models.UUIDField(default=uuid.uuid4,unique=True, editable=False)
     marker = models.ForeignKey(Marker,on_delete=models.CASCADE, null=True, blank=True)
     version = models.CharField(max_length=500, null=True, blank=True)
     

@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
-    'openpyxl',
-    'reportlab',
+    # 'openpyxl',
+    # 'reportlab',
     'core',
     'sticker_instructions',
     'users',

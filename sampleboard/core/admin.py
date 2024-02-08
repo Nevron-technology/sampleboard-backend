@@ -10,5 +10,5 @@ class MarkerAdmin(admin.ModelAdmin):
 class SampleBoardAdmin(admin.ModelAdmin):
     list_display = ['id', 'marker', 'version']
     
-admin.register(Type)
+admin.site.register(Type)
 

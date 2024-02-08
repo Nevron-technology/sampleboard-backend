@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import Marker, SampleBoard
+from .models import Marker, SampleBoard, Type
+
+
+class TypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Type
+        fields = ['id', 'name']
+
 
 class MarkerSerializer(serializers.ModelSerializer):
     class Meta:

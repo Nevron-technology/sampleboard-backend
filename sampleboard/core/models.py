@@ -16,26 +16,18 @@ class TimeStampedModel(models.Model):
         self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
 
+class Type(models.Model):
+    name = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Marker(models.Model):
-    COLOR_CHOICES = (
-    ('red', 'Red'),
-    ('blue', 'Blue'),
-    ('green', 'Green'),
-    ('yellow', 'Yellow'),
-    ('orange', 'Orange'),
-    ('purple', 'Purple'),
-    ('pink', 'Pink'),
-    ('brown', 'Brown'),
-    ('black', 'Black'),
-    ('white', 'White'),
-    # Add more colors as needed 
-    )   
-    
     latitude = models.CharField(max_length=200, null=True, blank=True)
     longitude = models.CharField(max_length=500, null=True, blank=True)
     number = models.CharField(max_length=500, unique=True, null=True, blank=True)
-    type = models.CharField(max_length=50, choices=COLOR_CHOICES, null=True, blank=True)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f'{self.number}'

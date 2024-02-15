@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import   StickersAndInstructionsByMarker, InstructionsPDFListByMarker, StickerListBySampleBoard, InstructionsPDFListCreateAPIView, InstructionsPDFDetailAPIView, StickerListCreateAPIView, StickerDetailAPIView
+from .views import    StickersAndInstructionsByMarker, InstructionsPDFListByMarker, StickerListBySampleBoard, InstructionsPDFListCreateAPIView, InstructionsPDFDetailAPIView, StickerListCreateAPIView, StickerDetailAPIView
 
 urlpatterns = [
     path('instructionpdfs/', InstructionsPDFListCreateAPIView.as_view(), name='instructionpdf-list-create'),

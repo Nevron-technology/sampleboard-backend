@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 import uuid
 
@@ -40,3 +42,9 @@ class SampleBoard(TimeStampedModel):
     
     def __str__(self):
         return f'Sample board at marker {self.marker}'
+
+
+@receiver(post_save, sender=Marker)
+def create_sample_board(sender, instance, created, **kwargs):
+    if created:
+        SampleBoard.objects.create(marker=instance, version="1.0")

@@ -13,13 +13,7 @@ from core.serializers import SampleBoardSerializer, MarkerSerializer
 from .models import InstructionsPDF, Sticker
 from .serializers import InstructionsPDFSerializer, StickerSerializer
 
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer
-from reportlab.lib import colors
-from reportlab.lib.units import inch
 
-import pandas as pd
-import io, openpyxl
 
 class InstructionsPDFListCreateAPIView(generics.ListCreateAPIView):
     queryset = InstructionsPDF.objects.all()

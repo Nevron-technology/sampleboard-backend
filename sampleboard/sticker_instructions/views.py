@@ -45,7 +45,7 @@ class HTMLCodeDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HTMLCodeSerializer
 
 
-class StickerListBySampleBoard(generics.ListAPIView):
+class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
     serializer_class = StickerSerializer
 
     def get_queryset(self):

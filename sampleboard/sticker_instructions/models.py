@@ -20,7 +20,7 @@ class Sticker(models.Model):
     
 
 class HTMLCode(models.Model):
-    sample_board = models.ForeignKey(SampleBoard,on_delete=models.CASCADE, null=True, blank=True)
+    sample_board = models.OneToOneField(SampleBoard, on_delete=models.CASCADE, null=True, blank=True)
     html_code = models.TextField(null=True, blank=True)
 
     def __str__(self):

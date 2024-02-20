@@ -10,8 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 from core.models import SampleBoard, Marker
 from core.serializers import SampleBoardSerializer, MarkerSerializer
-from .models import InstructionsPDF, Sticker
-from .serializers import InstructionsPDFSerializer, StickerSerializer
+from .models import InstructionsPDF, Sticker, HTMLCode
+from .serializers import InstructionsPDFSerializer, StickerSerializer, HTMLCodeSerializer
 
 
 
@@ -19,17 +19,30 @@ class InstructionsPDFListCreateAPIView(generics.ListCreateAPIView):
     queryset = InstructionsPDF.objects.all()
     serializer_class = InstructionsPDFSerializer
 
+
 class InstructionsPDFDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = InstructionsPDF.objects.all()
     serializer_class = InstructionsPDFSerializer
+
 
 class StickerListCreateAPIView(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerSerializer
 
+
 class StickerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerSerializer
+
+
+class HTMLCodeListCreateAPIView(generics.ListCreateAPIView):
+    queryset = HTMLCode.objects.all()
+    serializer_class = HTMLCodeSerializer
+
+
+class HTMLCodeDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HTMLCode.objects.all()
+    serializer_class = HTMLCodeSerializer
 
 
 class StickerListBySampleBoard(generics.ListAPIView):
@@ -49,11 +62,17 @@ class StickerListBySampleBoard(generics.ListAPIView):
         sample_board = SampleBoard.objects.get(uuid=sample_board_uuid)
         sample_board_serializer = SampleBoardSerializer(sample_board)
 
+        # Get HTML code associated with the sample board
+        html_code = HTMLCode.objects.filter(sample_board=sample_board)
+        print(html_code)
+        html_code_data = HTMLCodeSerializer(html_code, many=True).data if html_code else []
+
         # Create a combined response with stickers and sample board data
         response_data = {
             
             'sample_board': sample_board_serializer.data,
-            'stickers': serializer.data
+            'stickers': serializer.data,
+            'html_code': html_code_data
         }
 
         return Response(response_data)
@@ -108,8 +127,11 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
         # Get sample board data
         sample_board_queryset = SampleBoard.objects.filter(marker_id=marker_id)
         sample_board_serializer = SampleBoardSerializer(sample_board_queryset, many=True)
+        
+        # Get HTML code associated with the sample board
+        
 
-         # Combine stickers, marker, instructions PDFs, and sample board data
+        # Combine stickers, marker, instructions PDFs, and sample board data
         response_data = {
             'marker': marker_serializer.data,
             'instructions_pdfs': instructions_pdfs_serializer.data,
@@ -117,7 +139,11 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
         }
 
         for sample_board_data in sample_board_serializer.data:
+            html_codes = HTMLCode.objects.filter(sample_board=sample_board_data['id'])
+            html_code_data = HTMLCodeSerializer(html_codes, many=True).data if html_codes else None
+        
             sample_board_data['stickers'] = sticker_serializer.data
+            sample_board_data['html_codes'] = html_code_data
             response_data['sample_boards'].append(sample_board_data)
 
         return Response(response_data)

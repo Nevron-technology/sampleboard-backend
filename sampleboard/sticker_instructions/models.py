@@ -14,9 +14,14 @@ class Sticker(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
     sample_board = models.ForeignKey(SampleBoard,on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to='sticker_images/')
-    html_code = models.TextField(null=True, blank=True)
     
     def __str__(self):
         return f'{self.name}'
     
 
+class HTMLCode(models.Model):
+    sample_board = models.ForeignKey(SampleBoard,on_delete=models.CASCADE, null=True, blank=True)
+    html_code = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f'HTML code for {self.sample_board}'

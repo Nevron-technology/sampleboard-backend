@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import InstructionsPDF, Sticker
+from .models import InstructionsPDF, Sticker, HTMLCode
 
 @admin.register(InstructionsPDF)
 class InstructionsPDFAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ class StickerAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'sample_board', 'image']
     
 
+admin.site.register(HTMLCode)

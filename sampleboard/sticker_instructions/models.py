@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from core.models import Marker, SampleBoard
 
 
@@ -25,3 +28,10 @@ class HTMLCode(models.Model):
 
     def __str__(self):
         return f'HTML code for {self.sample_board}'
+
+
+
+@receiver(post_save, sender=SampleBoard)
+def create_html_code(sender, instance, created, **kwargs):
+    if created:
+        HTMLCode.objects.create(sample_board=instance)

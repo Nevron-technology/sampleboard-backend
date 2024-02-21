@@ -10,7 +10,7 @@ class InstructionsPDFSerializer(serializers.ModelSerializer):
 class StickerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sticker
-        fields = ['id', 'name', 'sample_board', 'image']
+        fields = ['id', 'name', 'sample_board', 'image', 'order']
 
 
 class HTMLCodeSerializer(serializers.ModelSerializer):

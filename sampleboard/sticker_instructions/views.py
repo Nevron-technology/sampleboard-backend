@@ -51,7 +51,7 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
     def get_queryset(self):
         sample_board_uuid = self.kwargs['uuid']
         # Filter stickers based on the provided sample board id
-        return Sticker.objects.filter(sample_board__uuid=sample_board_uuid)
+        return Sticker.objects.filter(sample_board__uuid=sample_board_uuid).order_by('order')
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -109,7 +109,7 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
 
     def get_queryset(self):
         marker_id = self.kwargs['marker_id']
-        return Sticker.objects.filter(sample_board__marker_id=marker_id)
+        return Sticker.objects.filter(sample_board__marker_id=marker_id).order_by('order')
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

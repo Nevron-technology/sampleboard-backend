@@ -19,7 +19,8 @@ class SampleBoardListCreateAPIView(generics.ListCreateAPIView):
 
 class SampleBoardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SampleBoardSerializer
-
+    lookup_field = 'uuid'
+    
     def get_queryset(self):
         uuid = self.kwargs['uuid']
         return SampleBoard.objects.filter(uuid=uuid)

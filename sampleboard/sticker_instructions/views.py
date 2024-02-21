@@ -1,12 +1,10 @@
-from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import generics, status
 from rest_framework.response import Response
-
-
-from PIL import Image, ImageDraw, ImageFont
 
 from core.models import SampleBoard, Marker
 from core.serializers import SampleBoardSerializer, MarkerSerializer
@@ -77,6 +75,7 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
 
         return Response(response_data)
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         sticker_updates = request.data.get('sticker_updates', [])
 
@@ -171,6 +170,7 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
 
         return Response(response_data)
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         sticker_updates = request.data.get('sticker_updates', [])
 

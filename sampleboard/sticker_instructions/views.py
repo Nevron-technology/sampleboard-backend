@@ -77,6 +77,29 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
 
         return Response(response_data)
 
+    def post(self, request, *args, **kwargs):
+        sticker_updates = request.data.get('sticker_updates', [])
+
+        if not sticker_updates:
+            return Response({'message': 'No sticker updates provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        for update in sticker_updates:
+            sticker_id = update.get('sticker_id')
+            new_order = update.get('new_order')
+
+            if not sticker_id or not new_order:
+                return Response({'message': 'Both sticker_id and new_order are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                sticker = Sticker.objects.get(id=sticker_id)
+            except Sticker.DoesNotExist:
+                return Response({'message': f'Sticker with id {sticker_id} not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            sticker.order = new_order
+            sticker.save()
+
+        return Response({'message': 'Sticker orders updated successfully'}, status=status.HTTP_200_OK)
+
 
 class InstructionsPDFListByMarker(generics.ListAPIView):
     serializer_class = InstructionsPDFSerializer
@@ -147,3 +170,26 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
             response_data['sample_boards'].append(sample_board_data)
 
         return Response(response_data)
+
+    def post(self, request, *args, **kwargs):
+        sticker_updates = request.data.get('sticker_updates', [])
+
+        if not sticker_updates:
+            return Response({'message': 'No sticker updates provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        for update in sticker_updates:
+            sticker_id = update.get('sticker_id')
+            new_order = update.get('new_order')
+
+            if not sticker_id or not new_order:
+                return Response({'message': 'Both sticker_id and new_order are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                sticker = Sticker.objects.get(id=sticker_id)
+            except Sticker.DoesNotExist:
+                return Response({'message': f'Sticker with id {sticker_id} not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            sticker.order = new_order
+            sticker.save()
+
+        return Response({'message': 'Sticker orders updated successfully'}, status=status.HTTP_200_OK)

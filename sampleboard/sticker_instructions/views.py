@@ -86,7 +86,7 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
             sticker_id = update.get('sticker_id')
             new_order = update.get('new_order')
 
-            if not sticker_id or not new_order:
+            if sticker_id is None or new_order is None:
                 return Response({'message': 'Both sticker_id and new_order are required'}, status=status.HTTP_400_BAD_REQUEST)
 
             try:
@@ -202,7 +202,7 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
             sticker_id = update.get('sticker_id')
             new_order = update.get('new_order')
 
-            if not sticker_id or not new_order:
+            if sticker_id is None or new_order is None:
                 return Response({'message': 'Both sticker_id and new_order are required'}, status=status.HTTP_400_BAD_REQUEST)
 
             try:

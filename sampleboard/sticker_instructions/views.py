@@ -99,6 +99,27 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
 
         return Response({'message': 'Sticker orders updated successfully'}, status=status.HTTP_200_OK)
 
+    @csrf_exempt
+    def delete(self, request, *args, **kwargs):
+        sticker_ids_to_delete = request.data.get('sticker_ids', [])
+
+        if not sticker_ids_to_delete:
+            return Response({'message': 'No sticker IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        deleted_stickers = []
+        for sticker_id in sticker_ids_to_delete:
+            try:
+                sticker = Sticker.objects.get(id=sticker_id)
+                sticker.delete()
+                deleted_stickers.append(sticker_id)
+            except Sticker.DoesNotExist:
+                pass  # If sticker not found, just continue to the next sticker ID
+
+        if deleted_stickers:
+            return Response({'message': f'Stickers with IDs {deleted_stickers} deleted successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No stickers found with provided IDs'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class InstructionsPDFListByMarker(generics.ListAPIView):
     serializer_class = InstructionsPDFSerializer
@@ -193,3 +214,24 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
             sticker.save()
 
         return Response({'message': 'Sticker orders updated successfully'}, status=status.HTTP_200_OK)
+    
+    @csrf_exempt
+    def delete(self, request, *args, **kwargs):
+        sticker_ids_to_delete = request.data.get('sticker_ids', [])
+
+        if not sticker_ids_to_delete:
+            return Response({'message': 'No sticker IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        deleted_stickers = []
+        for sticker_id in sticker_ids_to_delete:
+            try:
+                sticker = Sticker.objects.get(id=sticker_id)
+                sticker.delete()
+                deleted_stickers.append(sticker_id)
+            except Sticker.DoesNotExist:
+                pass  # If sticker not found, just continue to the next sticker ID
+
+        if deleted_stickers:
+            return Response({'message': f'Stickers with IDs {deleted_stickers} deleted successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No stickers found with provided IDs'}, status=status.HTTP_404_NOT_FOUND)

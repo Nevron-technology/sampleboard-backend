@@ -241,6 +241,7 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
 
 
 class UploadPDFView(APIView):
+    @csrf_exempt
     def post(self, request, format=None):
         uploaded_files = request.FILES.getlist('pdf_files')
         response_data = []

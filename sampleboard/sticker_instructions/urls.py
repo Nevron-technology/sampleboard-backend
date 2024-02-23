@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  HTMLCodeListCreateAPIView, HTMLCodeDetailAPIView, StickersAndInstructionsByMarker, InstructionsPDFListByMarker, StickerHTMLCodeListBySampleBoard, InstructionsPDFListCreateAPIView, InstructionsPDFDetailAPIView, StickerListCreateAPIView, StickerDetailAPIView
+from .views import  UploadPDFView, HTMLCodeListCreateAPIView, HTMLCodeDetailAPIView, StickersAndInstructionsByMarker, InstructionsPDFListByMarker, StickerHTMLCodeListBySampleBoard, InstructionsPDFListCreateAPIView, InstructionsPDFDetailAPIView, StickerListCreateAPIView, StickerDetailAPIView
 
 urlpatterns = [
     path('instructionpdfs/', InstructionsPDFListCreateAPIView.as_view(), name='instructionpdf-list-create'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('markers/<int:marker_id>/combined_data/', StickersAndInstructionsByMarker.as_view(), name='combined_data_by_marker'),
     path('html-code/', HTMLCodeListCreateAPIView.as_view(), name='html-code-list'),
     path('html-code/<int:pk>/', HTMLCodeDetailAPIView.as_view(), name='html-code-details'),
+    path('upload-pdf/', UploadPDFView.as_view(), name='upload-pdf'),
 ]

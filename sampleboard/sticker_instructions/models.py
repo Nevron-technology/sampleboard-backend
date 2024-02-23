@@ -6,7 +6,7 @@ from core.models import Marker, SampleBoard
 
 
 class InstructionsPDF(models.Model):
-    marker = models.ForeignKey(Marker,on_delete=models.CASCADE, null=True, blank=True)
+    marker = models.OneToOneField(Marker,on_delete=models.CASCADE, null=True, blank=True)
     pdf_file = models.FileField(upload_to='instruction_pdfs/', null=True, blank=True)
     
     def __str__(self):

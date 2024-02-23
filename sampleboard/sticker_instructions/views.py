@@ -2,15 +2,18 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.models import SampleBoard, Marker
 from core.serializers import SampleBoardSerializer, MarkerSerializer
 from .models import InstructionsPDF, Sticker, HTMLCode
 from .serializers import InstructionsPDFSerializer, StickerSerializer, HTMLCodeSerializer
 
+import os, re
 
 
 class InstructionsPDFListCreateAPIView(generics.ListCreateAPIView):
@@ -235,3 +238,56 @@ class StickersAndInstructionsByMarker(generics.ListAPIView):
             return Response({'message': f'Stickers with IDs {deleted_stickers} deleted successfully'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'No stickers found with provided IDs'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UploadPDFView(APIView):
+    def post(self, request, format=None):
+        uploaded_files = request.FILES.getlist('pdf_files')
+        response_data = []
+
+        if not uploaded_files:
+            return Response({'message': 'No files uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+
+        for file in uploaded_files:
+            # Extract marker number from the file name
+            filename = file.name
+            marker_number = self.extract_marker_number(filename)
+            marker = None
+
+            # Check if marker exists
+            try:
+                marker = Marker.objects.get(number=marker_number)
+            except Marker.DoesNotExist:
+                response_data.append({
+                    'file_name': filename,
+                    'message': f"Marker {marker_number} doesn't exist. Marker field left as null."
+                })
+                continue
+
+            try:
+                # Save the file and create InstructionsPDF instance
+                instructions_pdf_instance = InstructionsPDF(pdf_file=file, marker=marker)
+                instructions_pdf_instance.save()
+
+                response_data.append({
+                    'file_name': filename,
+                    'marker': marker_number,
+                    'message': 'Uploaded successfully.'
+                })
+            except IntegrityError:
+                response_data.append({
+                    'file_name': filename,
+                    'message': f"A PDF already exists for Marker {marker_number}."
+                })
+                continue
+
+        return Response(response_data, status=status.HTTP_201_CREATED)
+    
+    def extract_marker_number(self, filename):
+        # Find the last group of digits before the file extension
+        file_name_without_extension = os.path.splitext(filename)[0]
+        # Split the filename into groups of digits separated by non-digits
+        groups_of_digits = re.findall(r'\d+', file_name_without_extension)
+        # Select the last group of digits
+        last_group_of_digits = groups_of_digits[-1] if groups_of_digits else None
+        return int(last_group_of_digits) if last_group_of_digits else None

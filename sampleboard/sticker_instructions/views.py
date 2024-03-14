@@ -77,7 +77,6 @@ class StickerHTMLCodeListBySampleBoard(generics.ListAPIView):
         }
 
         return Response(response_data)
-
     @csrf_exempt
     def post(self, request, *args, **kwargs):
         sticker_updates = request.data.get('sticker_updates', [])
